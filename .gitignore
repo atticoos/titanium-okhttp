@@ -1,0 +1,7 @@
+android/.apt_generated
+build/
+android/android/build
+android/build
+android/dist
+android/libs
+android/bin

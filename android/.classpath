@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="android/src"/>
+	<classpathentry kind="src" path="android/build/.apt_generated"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/ajwhite/Development/android-sdk-macosx/platforms/android-17/android.jar"/>
+	<classpathentry kind="lib" path="/Users/ajwhite/Development/android-sdk-macosx/add-ons/addon-google_apis-google-17/libs/maps.jar"/>
+	<classpathentry kind="lib" path="/Users/ajwhite/Library/Application Support/Titanium/mobilesdk/osx/3.4.0.GA/android/titanium.jar"/>
+	<classpathentry kind="lib" path="/Users/ajwhite/Library/Application Support/Titanium/mobilesdk/osx/3.4.0.GA/android/kroll-common.jar"/>
+	<classpathentry kind="lib" path="/Users/ajwhite/Library/Application Support/Titanium/mobilesdk/osx/3.4.0.GA/android/kroll-apt.jar"/>
+	<classpathentry kind="lib" path="lib/okhttp-2.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/okio-1.2.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

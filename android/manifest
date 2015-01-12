@@ -1,0 +1,17 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.0.0
+apiversion: 2
+description: titanium-okhttp
+author: Your Name
+license: Specify your license
+copyright: Copyright (c) 2015 by Your Company
+
+# these should not be edited
+name: titanium-okhttp
+moduleid: com.atticoos.tiokhttp
+guid: 8f27f52f-2e2f-4bc2-a81e-a644caa66110
+platform: android
+minsdk: 3.4.0.GA
