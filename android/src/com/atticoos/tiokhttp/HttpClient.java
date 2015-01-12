@@ -13,6 +13,7 @@ import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.common.Log;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,7 +22,6 @@ class HttpClient
 {
 	private static final String LCAT = "TitaniumHttpClient";
 
-	
 	public static void GET (String url, final ProxyRequest proxyRequest) {
 		Request.Builder request = new Request.Builder().url(url);
 		HttpClient.send(request, proxyRequest);
@@ -55,21 +55,22 @@ class HttpClient
 		HttpClient.send(request, proxyRequest);
 	}
 	
-	public static void method (String method, String url, final ProxyRequest proxyRequest) throws InvalidMethodException {
-		if (method == "GET") {
-			HttpClient.GET(url, proxyRequest);
-		} else if (method == "POST") {
-			HttpClient.POST(url, proxyRequest);
-		} else if (method == "PUT") {
-			HttpClient.PUT(url, proxyRequest);
-		} else if (method == "PATCH") {
-			HttpClient.PATCH(url, proxyRequest);
-		} else if (method == "DELETE") {
-			HttpClient.DELETE(url, proxyRequest);
-		} else if (method == "HEAD") {
-			HttpClient.HEAD(url, proxyRequest);
-		} else {
-			throw new InvalidMethodException(method);
+	/**
+	 * Send a request by supplying the request method as a String and uses reflection to execute the proper request
+	 * 
+	 * @param methodString
+	 * @param url
+	 * @param proxyRequest
+	 * @throws InvalidMethodException
+	 */
+	public static void method (String methodString, String url, final ProxyRequest proxyRequest) throws InvalidMethodException {
+		try {
+			methodString = methodString.toUpperCase().trim();
+			Method method = HttpClient.class.getDeclaredMethod(methodString, String.class, ProxyRequest.class);
+			method.invoke(null, url, proxyRequest);			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new InvalidMethodException(methodString);
 		}
 	}
 	

@@ -19,6 +19,7 @@ class ProxyRequest
 	private KrollProxy proxy;
 	private HashMap<String, String> headers;
 	private String postData;
+	private String responseText;
 	private KrollFunction successCallback;
 	private KrollFunction errorCallback;
 	
@@ -132,6 +133,7 @@ class ProxyRequest
 	}
 	
 	public void fireSuccessCallback (String responseData, Integer statusCode, HashMap headers) {
+		this.responseText = responseData;
 		this.successCallback.call(this.proxy.getKrollObject(), new Object[]{responseData, statusCode, headers});
 	}
 	
@@ -148,10 +150,15 @@ class ProxyRequest
 	}
 	
 	public void fireErrorCallback (String responseData, Integer statusCode, HashMap headers) {
+		this.responseText = responseData;
 		this.errorCallback.call(this.proxy.getKrollObject(), new Object[]{responseData, statusCode, headers});
 	}
 	
 	public void setErrorCallback (KrollFunction callback) {
 		this.errorCallback = callback;
+	}
+	
+	public String getResponseText () {
+		return this.responseText;
 	}
 }

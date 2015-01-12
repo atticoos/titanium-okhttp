@@ -20,9 +20,15 @@ public class HttpClientProxy extends KrollProxy
 	private String requestMethod;
 	private String requestUrl;
 	private HashMap<String, String> requestHeaders = new HashMap<String, String>();
+	private ProxyRequest request;
 	
 	public HttpClientProxy () {
 		super();
+	}
+	
+	@Kroll.getProperty @Kroll.method
+	public String getResponseText () {
+		return this.request.getResponseText();
 	}
 	
 	@Kroll.method
