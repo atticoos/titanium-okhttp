@@ -37,7 +37,7 @@ public class HttpClientProxy extends KrollProxy
 	}
 	
 	@Kroll.method
-	public void send (String data) {
+	public void send (@Kroll.argument(optional = true) String data) {
 		ProxyRequest request = new ProxyRequest(this);
 		request.setHeaders(this.requestHeaders);
 		request.setPostData(data);
