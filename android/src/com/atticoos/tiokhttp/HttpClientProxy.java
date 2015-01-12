@@ -10,7 +10,7 @@ import org.appcelerator.titanium.util.TiConfig;
 import java.util.*;
 
 
-@Kroll.proxy(creatableInModule=TitaniumOkhttpModule.class, propertyAccessors = {"onload", "onerror"})
+@Kroll.proxy(creatableInModule=TitaniumOkhttpModule.class)
 public class HttpClientProxy extends KrollProxy
 {
 	// Standard Debugging variables
@@ -20,10 +20,6 @@ public class HttpClientProxy extends KrollProxy
 	private String requestMethod;
 	private String requestUrl;
 	private HashMap<String, String> requestHeaders = new HashMap<String, String>();
-	
-	private KrollFunction onload;
-	private KrollFunction onerror;
-	
 	
 	public HttpClientProxy () {
 		super();
@@ -46,12 +42,15 @@ public class HttpClientProxy extends KrollProxy
 		request.setHeaders(this.requestHeaders);
 		request.setPostData(data);
 		
-		if (this.onload != null && this.onload instanceof KrollFunction) {
-			request.setSuccessCallback(this.onload);
+		Object onload = this.getProperty("onload");
+		Object onerror = this.getProperty("onerror");
+		
+		if (onload != null && onload instanceof KrollFunction) {
+			request.setSuccessCallback((KrollFunction) onload);
 		}
 		
-		if (this.onerror != null && this.onerror instanceof KrollFunction) {
-			request.setErrorCallback(this.onerror);
+		if (onerror != null && onerror instanceof KrollFunction) {
+			request.setErrorCallback((KrollFunction) onerror);
 		}
 		
 		try {
@@ -59,27 +58,5 @@ public class HttpClientProxy extends KrollProxy
 		} catch (InvalidMethodException e) {
 			request.fireErrorCallback(e.toString());
 		}
-	}
-	
-	@Kroll.getProperty @Kroll.method
-	public KrollFunction getOnload () {
-		//String test = (String) this.getProperty("onload");
-		//return test;
-		return this.onload;
-	}
-	
-	@Kroll.setProperty @Kroll.method
-	public void setOnload (KrollFunction onload) {
-		this.onload = onload;
-	}
-	
-	@Kroll.method 
-	public void test () {
-		Log.d(LCAT, "TRYING TO INVOKE CALLBACK");
-		if (this.onload != null && this.onload instanceof KrollFunction) {
-			Log.d(LCAT, "ONLOAD IS NOT NULL");
-			this.onload.call(this.getKrollObject(), new Object[]{"foobar"});
-		}
-		Log.d(LCAT, "WHY NO WORK? " + this.onload);
 	}
 }
