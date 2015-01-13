@@ -46,7 +46,14 @@ class HttpClient
 	}
 	
 	public static void DELETE (String url, final ProxyRequest proxyRequest) {
-		Request.Builder request = new Request.Builder().url(url).delete();
+		Request.Builder request = new Request.Builder().url(url);
+		if (proxyRequest.hasPostData()) {
+			// workaround until https://github.com/square/okhttp/pull/1317
+			RequestBody requestBody = RequestBody.create(proxyRequest.getMediaType(), proxyRequest.getPostData());
+			request.method("DELETE", requestBody);
+		} else {
+			request.delete();
+		}
 		HttpClient.send(request,  proxyRequest);
 	}
 	

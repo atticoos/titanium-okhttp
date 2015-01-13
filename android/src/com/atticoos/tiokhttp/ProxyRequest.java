@@ -98,6 +98,10 @@ class ProxyRequest
 		this.headers.put(key, value);
 	}
 	
+	public boolean hasPostData () {
+		return this.postData != null && !this.postData.isEmpty();
+	}
+	
 	public String getPostData () {
 		return this.postData;
 	}
