@@ -1,39 +1,70 @@
-# titanium-okhttp Module
+# titanium-okhttp
+Titanium's native HTTP android module runs on an [Apache HTTP library from 2007](https://github.com/appcelerator/titanium_mobile/blob/58198c641d77e17d156431666e80bae732b5c130/android/titanium/src/thirdparty/org/apache/Commons-NOTICE.txt).
+The problem with [Ti.Network.HTTPClient](http://docs.appcelerator.com/titanium/3.0/#!/api/Titanium.Network.HTTPClient) is it's lack of support for some HTTP methods, mainly **no PATCH support**.
 
-## Description
+`titanium-okhttp` introduces an interchangeable HTTP client that interfaces [okhttp](https://github.com/square/okhttp). As of Android 4.4, okhttp has been the supporting library. Let's get titanium up to speed!
 
-TODO: Enter your module description here
+Note to [gittio](http://gitt.io) users: this module is still in development
 
-## Accessing the titanium-okhttp Module
+## BC Integration
+You can seamlessly swap out your existing networking client for `titanium-okhttp`, and pick up where you left off. No refactoring.
 
-To access this module from JavaScript, you would do the following:
+```js
+var client,
+    options = {
+	onload: function () {
+		// handle your response
+	},
+	onerror: function () {
+		// handle your error
+	}
+};
 
-    var titanium_okhttp = require("com.atticoos.tiokhttp");
+var client
 
-The titanium_okhttp variable is a reference to the Module object.
+if (Ti.Platform.osname === 'android') {
+	client = require('com.atticoos.tiokhttp').createHttpClient(options);
+} else {
+	client = Ti.Network.createHttpClient(options);
+}
 
-## Reference
+client.setRequestHeader('Content-Type', 'application/json; charset=utf8');
+client.open('GET', url);
+client.send(data);
+```
 
-TODO: If your module has an API, you should document
-the reference here.
+Nothing has changed, other than conditionally creating the client with a different library for android.
 
-### titanium_okhttp.function
+## A new interface
+If you're starting a new project and don't care to have backward compatability, you'll find a much nicer request API:
 
-TODO: This is an example of a module function.
+An example `GET` request:
+```js
+var client = TitaniumOkHttp.createOkHttpClient();
+client.GET(url, {
+	onSuccess: function (data, status, headers) {
+		// your response data
+	}
+});
+```
 
-### titanium_okhttp.property
-
-TODO: This is an example of a module property.
-
-## Usage
-
-TODO: Enter your usage example here
-
-## Author
-
-TODO: Enter your author name, email and other contact
-details you want to share here.
-
-## License
-
-TODO: Enter your license/legal information here.
+An example `POST` request, with headers:
+```js
+var client = TitaniumOkHttp.createOkHttpClient({
+	defaultHeaders: {
+		'Content-Type': 'application/json'
+	}
+});
+client.POST(url, {
+	data: JSON.stringify({foo: 'bar'}),
+	headers: {
+		'Authorization': 'Access-Token xxx'
+	},
+	onSuccess: function (data, status, headers) {
+		// your response data
+	},
+	onError: function (error, status, headers) {
+		// your error response data
+	}
+});
+```
