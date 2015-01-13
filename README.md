@@ -10,8 +10,8 @@ Note to [gittio](http://gitt.io) users: this module is still in development
 You can seamlessly swap out your existing networking client for `titanium-okhttp`, and pick up where you left off. No refactoring.
 
 ```js
-var TitaniumOkHttp = require('com.atticoos.tiokhttp');
-var options = {
+var client,
+    options = {
 	onload: function () {
 		// handle your response
 	},
@@ -20,18 +20,20 @@ var options = {
 	}
 };
 
-// remove our our old client:
-// var client = Ti.Network.createHttpClient(options)
+var client
 
-// use our new client
-var client = TitaniumOkHttp.createHttpClient(options);
+if (Ti.Platform.osname === 'android') {
+	client = require('com.atticoos.tiokhttp').createHttpClient(options);
+} else {
+	client = Ti.Network.createHttpClient(options);
+}
 
 client.setRequestHeader('Content-Type', 'application/json; charset=utf8');
 client.open('GET', url);
 client.send(data);
 ```
 
-Nothing has changed, other than the namespace of our constructor: `client = TitaniumOkHttp.createHttpClient`.
+Nothing has changed, other than conditionally creating the client with a different library for android.
 
 ## A new interface
 If you're starting a new project and don't care to have backward compatability, you'll find a much nicer request API:
