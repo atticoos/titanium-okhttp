@@ -28,7 +28,11 @@ public class HttpClientProxy extends KrollProxy
 	
 	@Kroll.getProperty @Kroll.method
 	public String getResponseText () {
-		return this.request.getResponseText();
+		if (this.request != null) {
+			return this.request.getResponseText();			
+		} else {
+			return null;
+		}
 	}
 	
 	@Kroll.method
@@ -44,25 +48,25 @@ public class HttpClientProxy extends KrollProxy
 	
 	@Kroll.method
 	public void send (@Kroll.argument(optional = true) String data) {
-		ProxyRequest request = new ProxyRequest(this);
-		request.setHeaders(this.requestHeaders);
-		request.setPostData(data);
+		this.request = new ProxyRequest(this);
+		this.request.setHeaders(this.requestHeaders);
+		this.request.setPostData(data);
 		
 		Object onload = this.getProperty("onload");
 		Object onerror = this.getProperty("onerror");
 		
 		if (onload != null && onload instanceof KrollFunction) {
-			request.setSuccessCallback((KrollFunction) onload);
+			this.request.setSuccessCallback((KrollFunction) onload);
 		}
 		
 		if (onerror != null && onerror instanceof KrollFunction) {
-			request.setErrorCallback((KrollFunction) onerror);
+			this.request.setErrorCallback((KrollFunction) onerror);
 		}
 		
 		try {
-			HttpClient.method(this.requestMethod, this.requestUrl, request);			
+			HttpClient.method(this.requestMethod, this.requestUrl, this.request);			
 		} catch (InvalidMethodException e) {
-			request.fireErrorCallback(e.toString());
+			this.request.fireErrorCallback(e.toString());
 		}
 	}
 }

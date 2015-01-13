@@ -98,13 +98,14 @@ class HttpClient
 			
 			@Override 
 			public void onResponse (Response response) {
-				Headers responseHeaders = response.headers();
-				for (int i = 0; i < responseHeaders.size(); i++) {
-					System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
-				}
-				HashMap<String, String> headerMap = HttpClient.getHeaders(responseHeaders);
-				
 				String bodyString;
+				Headers responseHeaders = response.headers();
+				HashMap<String, String> headerMap = new HashMap<String, String>();
+				
+				for (int i = 0; i < responseHeaders.size(); i++) {
+					headerMap.put(responseHeaders.name(i), responseHeaders.value(i));
+				}
+				
 				try {
 					ResponseBody body = response.body();
 					bodyString = body.string();
@@ -119,14 +120,5 @@ class HttpClient
 				}
 			}
 		});
-	}
-	
-	private static HashMap<String, String> getHeaders (Headers headers) {
-		HashMap<String, String> headerMap = new HashMap<String, String>();
-		
-		for (int i = 0; i < headers.size(); i++) {
-			headerMap.put(headers.name(i), headers.value(i));
-		}
-		return headerMap;
 	}
 }
