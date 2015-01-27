@@ -6,6 +6,16 @@ The problem with [Ti.Network.HTTPClient](http://docs.appcelerator.com/titanium/3
 
 Note to [gittio](http://gitt.io) users: this module is still in development
 
+## Installation
+
+#### With gittio
+```
+gittio install com.atticoos.tiokhttp
+```
+
+#### Without gittio
+Download the latest zip in `android/dist` and unzip in your project root such that it fills/creates a `modules` directory with its contents
+
 ## BC Integration
 You can seamlessly swap out your existing networking client for `titanium-okhttp`, and pick up where you left off. No refactoring.
 

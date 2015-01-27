@@ -2,6 +2,6 @@ android/.apt_generated
 build/
 android/android/build
 android/build
-android/dist
+android/dist/*.jar
 android/libs
 android/bin
