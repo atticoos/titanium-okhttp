@@ -26,25 +26,25 @@ class HttpClient
 		Request.Builder request = new Request.Builder().url(url);
 		HttpClient.send(request, proxyRequest);
 	}
-	
+
 	public static void POST (String url, final ProxyRequest proxyRequest) {
 		RequestBody requestBody = RequestBody.create(proxyRequest.getMediaType(), proxyRequest.getPostData());
 		Request.Builder request = new Request.Builder().url(url).post(requestBody);
 		HttpClient.send(request, proxyRequest);
 	}
-	
+
 	public static void PUT (String url, final ProxyRequest proxyRequest) {
 		RequestBody requestBody = RequestBody.create(proxyRequest.getMediaType(), proxyRequest.getPostData());
 		Request.Builder request = new Request.Builder().url(url).put(requestBody);
 		HttpClient.send(request, proxyRequest);
 	}
-	
+
 	public static void PATCH (String url, final ProxyRequest proxyRequest) {
 		RequestBody requestBody = RequestBody.create(proxyRequest.getMediaType(), proxyRequest.getPostData());
 		Request.Builder request = new Request.Builder().url(url).patch(requestBody);
 		HttpClient.send(request, proxyRequest);
 	}
-	
+
 	public static void DELETE (String url, final ProxyRequest proxyRequest) {
 		Request.Builder request = new Request.Builder().url(url);
 		if (proxyRequest.hasPostData()) {
@@ -56,15 +56,15 @@ class HttpClient
 		}
 		HttpClient.send(request,  proxyRequest);
 	}
-	
+
 	public static void HEAD (String url, final ProxyRequest proxyRequest) {
 		Request.Builder request = new Request.Builder().url(url).head();
 		HttpClient.send(request, proxyRequest);
 	}
-	
+
 	/**
 	 * Send a request by supplying the request method as a String and uses reflection to execute the proper request
-	 * 
+	 *
 	 * @param methodString
 	 * @param url
 	 * @param proxyRequest
@@ -74,17 +74,16 @@ class HttpClient
 		try {
 			methodString = methodString.toUpperCase().trim();
 			Method method = HttpClient.class.getDeclaredMethod(methodString, String.class, ProxyRequest.class);
-			method.invoke(null, url, proxyRequest);			
+			method.invoke(null, url, proxyRequest);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new InvalidMethodException(methodString);
 		}
 	}
-	
+
 	private static void send (Request.Builder request, final ProxyRequest proxyRequest) {
 		final OkHttpClient client = new OkHttpClient();
-		Log.d(LCAT, "Making request");
-		
+
 		if (proxyRequest.hasHeaders()) {
 			Iterator it = proxyRequest.getHeaders().entrySet().iterator();
 			while (it.hasNext()) {
@@ -92,34 +91,34 @@ class HttpClient
 				request.header(pairs.getKey(), pairs.getValue());
 			}
 		}
-		
+
 		client.newCall(request.build()).enqueue(new Callback () {
-			
-			@Override 
+
+			@Override
 			public void onFailure (Request request, IOException e) {
 				e.printStackTrace();
 				if (proxyRequest.hasErrorCallback()) {
 					proxyRequest.fireErrorCallback(null, null, null);
 				}
 			}
-			
-			@Override 
+
+			@Override
 			public void onResponse (Response response) {
 				String bodyString;
 				Headers responseHeaders = response.headers();
 				HashMap<String, String> headerMap = new HashMap<String, String>();
-				
+
 				for (int i = 0; i < responseHeaders.size(); i++) {
 					headerMap.put(responseHeaders.name(i), responseHeaders.value(i));
 				}
-				
+
 				try {
 					ResponseBody body = response.body();
 					bodyString = body.string();
 				} catch (IOException e) {
 					bodyString = "";
 				}
-				
+
 				if (response.isSuccessful() && proxyRequest.hasSuccessCallback()) {
 					proxyRequest.fireSuccessCallback(bodyString, response.code(), headerMap);
 				} else if (!response.isSuccessful() && proxyRequest.hasErrorCallback()) {
