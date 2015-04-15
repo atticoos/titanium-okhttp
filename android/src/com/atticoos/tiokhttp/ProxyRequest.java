@@ -16,10 +16,10 @@ class ProxyRequest
 	private final String KEY_POSTDATA = "data";
 	private final String KEY_HEADERS = "headers";
 	
+	private String postData = new String(); // https://github.com/square/okhttp/pull/1558
+	private String responseText;
 	private KrollProxy proxy;
 	private HashMap<String, String> headers;
-	private String postData;
-	private String responseText;
 	private KrollFunction successCallback;
 	private KrollFunction errorCallback;
 	
@@ -59,7 +59,7 @@ class ProxyRequest
 			if (proxyArgs.containsKey(KEY_POSTDATA)) {
 				object = proxyArgs.get(KEY_POSTDATA);
 				if (object instanceof String) {
-					this.postData = (String) object;
+					this.setPostData((String) object);
 				}
 			}
 			
@@ -107,7 +107,8 @@ class ProxyRequest
 	}
 	
 	public void setPostData (String postData) {
-		this.postData = postData;
+		// ensure the postData is never null, as OkHTTP may only consume non nulls at this time
+		this.postData = (null == postData ? "" : postData);
 	}
 	
 	public boolean hasContentType () {
