@@ -16,10 +16,10 @@ class ProxyRequest
 	private final String KEY_POSTDATA = "data";
 	private final String KEY_HEADERS = "headers";
 	
-	private KrollProxy proxy;
-	private HashMap<String, String> headers;
 	private String postData = new String(); // https://github.com/square/okhttp/pull/1558
 	private String responseText;
+	private KrollProxy proxy;
+	private HashMap<String, String> headers;
 	private KrollFunction successCallback;
 	private KrollFunction errorCallback;
 	
