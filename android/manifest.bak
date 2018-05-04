@@ -2,8 +2,8 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 2.0.0
-apiversion: 4
+version: 1.1.1
+apiversion: 2
 architectures: arm64-v8a armeabi-v7a x86
 description: titanium-okhttp
 author: Your Name
@@ -15,4 +15,4 @@ name: titanium-okhttp
 moduleid: com.atticoos.tiokhttp
 guid: 8f27f52f-2e2f-4bc2-a81e-a644caa66110
 platform: android
-minsdk: 7.1.1
+minsdk: 3.4.0.GA
