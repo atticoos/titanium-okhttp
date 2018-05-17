@@ -7,7 +7,7 @@ import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.annotations.Kroll;
-import org.appcelerator.titanium.util.TiConfig;
+import org.appcelerator.kroll.common.TiConfig;
 import java.util.*;
 
 @Kroll.proxy(creatableInModule=TitaniumOkhttpModule.class)
